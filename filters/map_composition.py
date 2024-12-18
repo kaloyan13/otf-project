@@ -243,8 +243,6 @@ class MapComposition(QgsService):
                             map_registry.removeMapLayer(current_layer.id())
                             map_registry.addMapLayer(new_layer)
 
-            qgis_layers = [l for l in map_registry.mapLayers().values()]
-
             if len(vector_layers):
                 for layer_source in vector_layers:
                     project.writeEntry(
@@ -262,7 +260,7 @@ class MapComposition(QgsService):
                 response.write(project.error().encode('utf8'))
                 return
 
-            generate_legend(qgis_layers, project_path)
+            generate_legend(map_registry.mapLayers(), project_path)
 
             if remove_qml:
                 for qml in qml_files:
