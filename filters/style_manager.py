@@ -23,7 +23,6 @@ from qgis.server import QgsServerFilter
 from qgis.core import (
     QgsProject,
     QgsMapLayerStyle,
-    QgsMapLayerRegistry,
     QgsMessageLog,
     QgsVectorLayer,
     QgsRasterLayer)
@@ -91,7 +90,7 @@ class StyleManager(QgsServerFilter):
                     'Error while reading the project : %s' % project.error())
                 return
 
-            maplayer_registry = QgsMapLayerRegistry.instance()
+            maplayer_registry = QgsProject.instance()
             qgis_layer = maplayer_registry.mapLayer(layer)
             if not qgis_layer:
                 qgis_layer = maplayer_registry.mapLayersByName(layer)
@@ -142,7 +141,7 @@ class StyleManager(QgsServerFilter):
     @staticmethod
     def set_default_style(name, project, project_path, qgis_layer, request):
         """Set default style."""
-        maplayer_registry = QgsMapLayerRegistry.instance()
+        maplayer_registry = QgsProject.instance()
         style_manager = qgis_layer.styleManager()
         if name not in style_manager.styles():
             request.appendBody('NAME is NOT an existing style.\n')
@@ -179,7 +178,7 @@ class StyleManager(QgsServerFilter):
     @staticmethod
     def remove_style(name, project, project_path, qgis_layer, request):
         """Remove a style to a layer."""
-        maplayer_registry = QgsMapLayerRegistry.instance()
+        maplayer_registry = QgsProject.instance()
         style_manager = qgis_layer.styleManager()
         if name not in style_manager.styles():
             request.appendBody('NAME is NOT an existing style.\n')
@@ -203,7 +202,7 @@ class StyleManager(QgsServerFilter):
     @staticmethod
     def add_style(name, params, project, project_path, qgis_layer, request):
         """Add a style to a layer in a QGIS project."""
-        maplayer_registry = QgsMapLayerRegistry.instance()
+        maplayer_registry = QgsProject.instance()
 
         # QML
         qml_path = params.get('QML')

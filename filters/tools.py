@@ -18,7 +18,7 @@
 """
 import os
 import urllib
-import urlparse
+import urllib.parse
 import xml.etree.ElementTree as ET
 
 from qgis.core import QgsVectorLayer, QgsRasterLayer, QgsMapLayer

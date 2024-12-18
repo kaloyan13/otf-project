@@ -24,7 +24,7 @@ from json import loads
 from qgis.server import QgsServerFilter
 from qgis.core import (
     QgsProject,
-    QgsMapLayerRegistry,
+    QgsProject,
     QgsMessageLog,
     QgsVectorLayer,
     QgsRasterLayer)
@@ -105,7 +105,7 @@ class LayerDefinition(QgsServerFilter):
                         'One layer is invalid: %s.\n' % query_string)
                     return
 
-                QgsMapLayerRegistry.instance().addMapLayer(qgis_layer)
+                QgsProject.instance().addMapLayer(qgis_layer)
                 final_layers.append(qgis_layer)
 
             qlr = final_layers[0].asLayerDefinition(final_layers).toString()
@@ -146,7 +146,7 @@ class LayerDefinition(QgsServerFilter):
                         'One layer is invalid: %s.\n' % query_string)
                     return
 
-                QgsMapLayerRegistry.instance().addMapLayer(qgis_layer)
+                QgsProject.instance().addMapLayer(qgis_layer)
 
             project_path = tempfile.NamedTemporaryFile(
                 suffix='.qgs', delete=False)

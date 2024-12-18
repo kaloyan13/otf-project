@@ -22,7 +22,7 @@ from os import remove
 from qgis.server import QgsServerFilter
 from qgis.core import (
     QgsProject,
-    QgsMapLayerRegistry,
+    QgsProject,
     QgsMessageLog,
     QgsVectorLayer,
     QgsRasterLayer)
@@ -173,7 +173,7 @@ class MapComposition(QgsServerFilter):
                 style_manager = qgis_layer.styleManager()
                 style_manager.renameStyle('', 'default')
 
-            map_registry = QgsMapLayerRegistry.instance()
+            map_registry = QgsProject.instance()
             # Add layer to the registry
             if overwrite:
                 # Insert all new layers
