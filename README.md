@@ -76,7 +76,7 @@ Then build your data source definition and quote it:
 ...   'url': tile_url,
 ...   'type': 'xyz'
 ... }
->>> datasource = '&'.join(['{key}={value}'.format(key=key,value=value) for key,value in definition.iteritems()])
+>>> datasource = '&'.join(['{key}={value}'.format(key=key,value=value) for key,value in definition.items()])
 'url=http%3A//a.tile.osm.org/%7Bz%7D/%7Bx%7D/%7By%7D.png&type=xyz'
 >>> quoted_datasource = quote(datasource)
 'url%3Dhttp%253A//a.tile.osm.org/%257Bz%257D/%257Bx%257D/%257By%257D.png%26type%3Dxyz'

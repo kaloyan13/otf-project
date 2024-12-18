@@ -29,7 +29,7 @@ class TestServerPlugin(unittest.TestCase):
     def request(self, query_string):
 
         self.string = "QUERY_STRING='"
-        for param, value in query_string.iteritems():
+        for param, value in query_string.items():
             self.string += param + '=' + value + '&'
         self.string += "'"
 
