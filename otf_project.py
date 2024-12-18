@@ -40,6 +40,6 @@ class OtfProjectServer(object):
             try:
                 server_iface.registerFilter(f(server_iface), i)
                 QgsMessageLog.logMessage('OTF Project - loading %s' % name)
-            except Exception, e:
+            except Exception as e:
                 QgsMessageLog.logMessage(
                     'OTF Project - Error loading %s : %s' % (name, e))
