@@ -70,7 +70,7 @@ def is_file_path(uri):
             return True
         # Check if it is a proper file:// uri.
         # Need to unquote/decode it first
-        sanitized_uri = urllib.unquote(uri).decode('utf-8')
+        sanitized_uri = urllib.parse.unquote(uri)
         if sanitized_uri.startswith('file://'):
             return True
     except Exception:
@@ -88,7 +88,7 @@ def is_tile_path(uri):
     """
     try:
         # Since this is a uri, unquote/decode it first
-        sanitized_uri = urllib.unquote(uri).decode('utf-8')
+        sanitized_uri = urllib.parse.unquote(uri)
         if sanitized_uri.startswith(('http://', 'https://')):
             return True
         # It might be in the form of query string
@@ -138,7 +138,7 @@ def layer_from_source(source_uri, name):
     if is_file_path(source_uri):
 
         # sanitize source_uri
-        sanitized_uri = urllib.unquote(source_uri).decode('utf-8')
+        sanitized_uri = urllib.parse.unquote(source_uri)
         sanitized_uri.replace('file://', '')
 
         if source_uri.endswith(vector_extensions):
@@ -157,7 +157,7 @@ def layer_from_source(source_uri, name):
     elif is_tile_path(source_uri):
 
         # sanitize source_uri
-        sanitized_uri = urllib.unquote(source_uri).decode('utf-8')
+        sanitized_uri = urllib.parse.unquote(source_uri)
         # Check if it is only a url
         if sanitized_uri.startswith(('http://', 'https://')):
             # Then it is probably a tile xyz url
