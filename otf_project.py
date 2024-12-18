@@ -34,11 +34,13 @@ class OtfProjectServer(object):
         QgsMessageLog.logMessage(
             'SUCCESS - OTF Project init', 'plugin', Qgis.MessageLevel.Info)
 
-        filters = [MapComposition, StyleManager, LayerDefinition]
+        #filters = [MapComposition, StyleManager, LayerDefinition]
+        filters = [MapComposition]
         for i, f in enumerate(filters):
             name = f.__name__
             try:
-                server_iface.registerFilter(f(server_iface), i)
+                reg = server_iface.serviceRegistry()
+                reg.registerService(MapComposition())
                 QgsMessageLog.logMessage('OTF Project - loading %s' % name)
             except Exception as e:
                 QgsMessageLog.logMessage(

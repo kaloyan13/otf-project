@@ -19,7 +19,7 @@
 
 from os.path import exists, splitext, basename, isfile
 from os import remove
-from qgis.server import QgsServerFilter
+from qgis.server import *
 from qgis.core import (
     QgsProject,
     QgsProject,
@@ -34,15 +34,34 @@ from .tools import (
     layer_from_source)
 
 
-class MapComposition(QgsServerFilter):
+class MapComposition(QgsService):
 
     """Class to create a QGIS Project with one or many layers."""
 
-    def __init__(self, server_iface):
-        super(MapComposition, self).__init__(server_iface)
+    def __init__(self, debug: bool = False) -> None:
+        super().__init__()
+        _ = debug
+
+    # QgsService inherited
+
+    def name(self) -> str:
+        """ Service name
+        """
+        return 'MAPCOMPOSITION'
+
+    def version(self) -> str:
+        """ Service version
+        """
+        return "1.0.0"
+
+    # noinspection PyMethodMayBeStatic
+    def allowMethod(self, method: QgsServerRequest.Method) -> bool:
+        """ Check supported HTTP methods
+        """
+        return method in (QgsServerRequest.GetMethod)
 
     # noinspection PyPep8Naming
-    def responseComplete(self):
+    def executeRequest(self, request: QgsServerRequest, response: QgsServerResponse, project: QgsProject) -> None:
         """Create a QGIS Project.
 
         Example :
@@ -58,14 +77,13 @@ class MapComposition(QgsServerFilter):
         request = self.serverInterface().requestHandler()
         params = request.parameterMap()
 
+        response.setHeader('Content-type', 'text/plain; charset=utf-8')
+					
         if params.get('SERVICE', '').upper() == 'MAPCOMPOSITION':
-            request.clearHeaders()
-            request.setHeader('Content-type', 'text/plain')
-            request.clearBody()
-
             project_path = params.get('PROJECT')
             if not project_path:
-                request.appendBody('PROJECT parameter is missing.\n')
+                response.setStatusCode(400)
+                response.write('PROJECT parameter is missing.\n'.encode('utf8'))
                 return
 
             overwrite = params.get('OVERWRITE')
@@ -100,28 +118,32 @@ class MapComposition(QgsServerFilter):
 
             # In case FILES also empty, raise error and exit.
             if not sources_parameters:
-                request.appendBody('SOURCES parameter is missing.\n')
+                response.setStatusCode(400)
+                response.write('SOURCES parameter is missing.\n'.encode('utf8'))
                 return
 
             sources = sources_parameters.split(';')
             for layer_source in sources:
 
                 if not validate_source_uri(layer_source):
-                    request.appendBody(
-                        'invalid parameter: {0}.\n'.format(layer_source))
+                    response.setStatusCode(400)
+                    s = 'invalid parameter: {0}.\n'.format(layer_source)
+                    response.write(s.encode('utf8'))
                     return
 
                 if is_file_path(layer_source):
                     if not exists(layer_source):
-                        request.appendBody('file not found : %s.\n' % layer_source)
+                        response.setStatusCode(400)
+                        s = 'file not found : %s.\n' % layer_source
+                        response.write(s.encode('utf8'))
                         return
 
             names_parameters = params.get('NAMES', None)
             if names_parameters:
                 names = names_parameters.split(';')
                 if len(names) != len(sources):
-                    request.appendBody(
-                        'Not same length between NAMES and SOURCES')
+                    response.setStatusCode(400)
+                    response.write('Not same length between NAMES and SOURCES'.encode('utf8'))
                     return
             else:
                 names = [
@@ -148,11 +170,15 @@ class MapComposition(QgsServerFilter):
                 qgis_layer = layer_from_source(layer_source, layer_name)
 
                 if not qgis_layer:
-                    request.appendBody('Invalid format : %s' % layer_source)
+                    response.setStatusCode(400)
+                    s = 'Invalid format : %s' % layer_source
+                    response.write(s.encode('utf8'))
                     return
 
                 if not qgis_layer.isValid():
-                    request.appendBody('Layer is not valid : %s' % layer_source)
+                    response.setStatusCode(400)
+                    s = 'Layer is not valid : %s' % layer_source
+                    response.write(s.encode('utf8'))
                     return
 
                 if isinstance(qgis_layer, QgsRasterLayer):
@@ -160,8 +186,8 @@ class MapComposition(QgsServerFilter):
                 elif isinstance(qgis_layer, QgsVectorLayer):
                     vector_layers.append(qgis_layer.id())
                 else:
-                    request.appendBody('Invalid type : {0} - {1}'.format(
-                        qgis_layer, type(qgis_layer)))
+                    s = 'Invalid type : {0} - {1}'.format(qgis_layer, type(qgis_layer))
+                    response.write(s.encode('utf8'))
 
                 qgis_layers.append(qgis_layer)
 
@@ -245,4 +271,5 @@ class MapComposition(QgsServerFilter):
                         'Removing QML {path}'.format(path=qml))
                     remove(qml)
 
-            request.appendBody('OK')
+            response.setStatusCode(200)
+            response.write('OK'.encode('utf8'))
