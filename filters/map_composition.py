@@ -258,7 +258,8 @@ class MapComposition(QgsService):
             project.clear()
 
             if not exists(project_path) and not isfile(project_path):
-                request.appendBody(project.error())
+                response.setStatusCode(500)
+                response.write(project.error().encode('utf8'))
                 return
 
             generate_legend(qgis_layers, project_path)
