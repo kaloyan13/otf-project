@@ -243,7 +243,7 @@ class MapComposition(QgsService):
                             map_registry.removeMapLayer(current_layer.id())
                             map_registry.addMapLayer(new_layer)
 
-            qgis_layers = [l for l in map_registry.mapLayers().itervalues()]
+            qgis_layers = [l for l in map_registry.mapLayers().values()]
 
             if len(vector_layers):
                 for layer_source in vector_layers:

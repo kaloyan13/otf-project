@@ -157,7 +157,7 @@ class StyleManager(QgsServerFilter):
         # The project has been overridden. We need to regenerate the legend
         # manually.
         qgis_layers = [
-            layer for layer in maplayer_registry.mapLayers().itervalues()]
+            layer for layer in maplayer_registry.mapLayers().values()]
         generate_legend(qgis_layers, project_path)
         request.appendBody('OK')
         return True
@@ -194,7 +194,7 @@ class StyleManager(QgsServerFilter):
         # The project has been overridden. We need to regenerate the legend
         # manually.
         qgis_layers = [
-            layer for layer in maplayer_registry.mapLayers().itervalues()]
+            layer for layer in maplayer_registry.mapLayers().values()]
         generate_legend(qgis_layers, project_path)
         request.appendBody('OK')
         return True
@@ -243,7 +243,7 @@ class StyleManager(QgsServerFilter):
         # The project has been overridden. We need to regenerate the legend
         # manually.
         qgis_layers = [
-            layer for layer in maplayer_registry.mapLayers().itervalues()]
+            layer for layer in maplayer_registry.mapLayers().values()]
         generate_legend(qgis_layers, project_path)
         if remove_qml:
             QgsMessageLog.logMessage(
