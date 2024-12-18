@@ -74,9 +74,7 @@ class MapComposition(QgsService):
         REMOVEQML=true&
         OVERWRITE=true&
         """
-        request = self.serverInterface().requestHandler()
-        params = request.parameterMap()
-
+        params = request.parameters()
         response.setHeader('Content-type', 'text/plain; charset=utf-8')
 					
         if params.get('SERVICE', '').upper() == 'MAPCOMPOSITION':
