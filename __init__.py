@@ -20,6 +20,6 @@
 
 # noinspection PyDocstring,PyPep8Naming
 def serverClassFactory(serverIface):
-    from otf_project import OtfProjectServer
+    from . otf_project import OtfProjectServer
     return OtfProjectServer(serverIface)
 
