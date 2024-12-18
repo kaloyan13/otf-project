@@ -18,9 +18,9 @@
 """
 
 from qgis.core import QgsMessageLog, QgsLogger
-from filters.style_manager import StyleManager
-from filters.map_composition import MapComposition
-from filters.layer_definition import LayerDefinition
+from . filters.style_manager import StyleManager
+from . filters.map_composition import MapComposition
+from . filters.layer_definition import LayerDefinition
 
 __author__ = 'Etienne Trimaille'
 __date__ = '25/05/2016'
