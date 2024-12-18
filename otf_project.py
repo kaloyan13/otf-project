@@ -17,7 +17,7 @@
 ***************************************************************************
 """
 
-from qgis.core import QgsMessageLog, QgsLogger
+from qgis.core import *
 from . filters.style_manager import StyleManager
 from . filters.map_composition import MapComposition
 from . filters.layer_definition import LayerDefinition
@@ -32,7 +32,7 @@ class OtfProjectServer(object):
 
     def __init__(self, server_iface):
         QgsMessageLog.logMessage(
-            'SUCCESS - OTF Project init', 'plugin', QgsMessageLog.INFO)
+            'SUCCESS - OTF Project init', 'plugin', Qgis.MessageLevel.Info)
 
         filters = [MapComposition, StyleManager, LayerDefinition]
         for i, f in enumerate(filters):
