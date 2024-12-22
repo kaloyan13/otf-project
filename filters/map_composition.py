@@ -150,6 +150,7 @@ class MapComposition(QgsService):
 
             QgsMessageLog.logMessage('Setting up project to %s' % project_path)
             project = QgsProject.instance()
+            project.clear()
             project.setFileName(project_path)
             if exists(project_path) and not overwrite:
                 project.read()
